@@ -1,7 +1,7 @@
 import java.io.File;
 import java.util.Scanner;
 
-public class Main {
+public class Sort_list {
     public static File get_file() {
         String file_name;
         System.out.print("Enter the name of the file to be opened: ");

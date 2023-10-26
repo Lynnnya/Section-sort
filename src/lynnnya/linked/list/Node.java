@@ -1,3 +1,5 @@
+package lynnnya.linked.list;
+
 public class Node<T> {
     private final T payload;
     private Node<T> previous;
