@@ -1,20 +1,37 @@
-package lynnnya.linked.list;
+package io.github.lynnnya.linked.list;
 
-import lynnnya.lynnsort.Lynn_sort;
+import io.github.lynnnya.lynnsort.Lynn_sort;
 public class Linked_list<T extends Comparable<T>> {
     private Node<T> head;
     private Node<T> tail;
+    private int length;
+    public Linked_list () {
+        this.head = null;
+        this.length = 0;
+    }
     public Linked_list (Node<T> node) {
         this.head = node;
         this.tail = node;
+        this.length = 1;
     }
     public void add_node (Node<T> node) {
+        if (head == null) {
+            this.head = node;
+            this.tail = node;
+            return;
+        }
         node.set_previous(this.tail);
         this.tail.set_next(node);
         this.tail = node;
+        this.length ++;
     }
     public void add_node (T payload) {
         Node<T> node = new Node<>(payload);
+        if (head == null) {
+            this.head = node;
+            this.tail = node;
+            return;
+        }
         node.set_previous(this.tail);
         this.tail.set_next(node);
         this.tail = node;
@@ -26,12 +43,6 @@ public class Linked_list<T extends Comparable<T>> {
         return tail;
     }
     public int length () {
-        int length = 0;
-        Node<T> current_node = head;
-        while (current_node != null) {
-            length ++;
-            current_node = iterate(current_node);
-        }
         return length;
     }
     public Node<T> iterate (Node<T> current_node) {
@@ -125,5 +136,12 @@ public class Linked_list<T extends Comparable<T>> {
             return;
         Lynn_sort<T> sort = new Lynn_sort<>(this);
         sort.sort();
+    }
+    public void to_string () {
+        Node<T> current = this.head;
+        while (current != this.tail.get_next()) {
+            System.out.print(current.get_payload() + ", ");
+            current = current.get_next();
+        }
     }
 }

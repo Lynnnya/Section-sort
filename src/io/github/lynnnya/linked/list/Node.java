@@ -1,6 +1,6 @@
-package lynnnya.linked.list;
+package io.github.lynnnya.linked.list;
 
-public class Node<T> {
+public class Node<T> implements Comparable<Node<T>> {
     private final T payload;
     private Node<T> previous;
     private Node<T> next;
@@ -25,5 +25,10 @@ public class Node<T> {
     }
     public T get_payload () {
         return payload;
+    }
+
+    @Override
+    public int compareTo(Node<T> o) {
+        return 0;
     }
 }
