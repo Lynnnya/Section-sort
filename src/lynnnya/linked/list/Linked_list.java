@@ -37,29 +37,68 @@ public class Linked_list<T extends Comparable<T>> {
     public Node<T> iterate (Node<T> current_node) {
         return current_node.get_next();
     }
-    public void insert () {
-        //sdf
+    public void insert (Node<T> first, Node<T> last, Node<T> position) {
+        Node<T> end_next = last.get_next();
+        Node<T> begin_previous = first.get_previous();
+
+        if (end_next == null && position == null)
+            return;
+        if (begin_previous == null)
+            this.head = last.get_next();
+        else
+            first.get_previous().set_next(end_next);
+        last.get_next().set_previous(begin_previous);
+
+        if (position == null) {
+            first.set_previous(this.tail);
+            this.tail.set_next(first);
+            last.set_next(null);
+            this.tail = last;
+            return;
+        }
+        if (position.get_previous() == null) {
+            last.set_next(this.head);
+            this.head.set_previous(last);
+            first.set_previous(null);
+            this.head = first;
+            return;
+        }
+
+        Node<T> pos_previous = position.get_previous();
+        position.get_previous().set_next(first);
+        first.set_previous(pos_previous);
+        last.set_next(position);
+        position.set_previous(last);
     }
     public void insert (Node<T> tb_insert, Node<T> position) {
+        Node<T> ins_next = tb_insert.get_next();
+        Node<T> ins_previous = tb_insert.get_previous();
+        if (ins_previous == null)
+            this.head = tb_insert.get_next();
+        else
+            tb_insert.get_previous().set_next(ins_next);
+        tb_insert.get_next().set_previous(ins_previous);
         if (position == null) {
+            tb_insert.set_next(null);
             add_node(tb_insert);
             return;
         }
-        Node<T> ins_next = tb_insert.get_next();
-        Node<T> ins_previous = tb_insert.get_previous();
-        Node<T> pos_next = position.get_next();
-        Node<T> pos_previous = tb_insert.get_previous();
+
+        Node<T> pos_previous = position.get_previous();
         if (ins_next == null)
             this.tail = tb_insert.get_previous();
         else
-            ins_next.set_previous(tb_insert.get_previous());
+            tb_insert.get_next().set_previous(ins_previous);
         tb_insert.get_previous().set_next(ins_next);
 
+        if (pos_previous == null)
+            this.head = tb_insert;
+        else
+            position.get_previous().set_next(tb_insert);
+        position.set_previous(tb_insert);
+
         tb_insert.set_next(position);
-        if (position.get_previous() == null) {
-            position.set_previous(tb_insert);
-        }
-        Node<T> pos_previous_next = position.get_previous().get_next();
+        tb_insert.set_previous(pos_previous);
     }
     public void swap (Node<T> current, Node<T> tb_swaped) {
         Node<T> cur_next = current.get_next();

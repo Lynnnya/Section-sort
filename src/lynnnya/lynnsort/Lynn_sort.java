@@ -11,14 +11,37 @@ public class Lynn_sort<T extends Comparable<T>> {
     public Lynn_sort (Linked_list<T> list) {
         this.list = list;
     }
-    private boolean is_lesser (Node<T> current_node) {
-        return head.get_payload().compareTo(current_node.get_payload()) > 0;
+    private boolean is_lesser (Node<T> current_node, Node<T> tb_compared) {
+        return tb_compared.get_payload().compareTo(current_node.get_payload()) > 0;
+    }
+    private boolean is_greater (Node<T> current_node, Node<T> tb_compared) {
+        return tb_compared.get_payload().compareTo(current_node.get_payload()) < 0;
+    }
+    private void sort_sections_additional () {
+        Node<T> current_node = head;
+        Node<T> new_head, new_tail;
+        Node<T> previous_node;
+        while (current_node != tail.get_next()) {
+            if (is_greater(current_node, tail)) {
+                previous_node = current_node.get_previous();
+                list.insert(current_node, tail.get_next());
+                current_node = previous_node;
+            }
+            current_node = list.iterate(current_node);
+        }
     }
     private void sort_sections () {
         Node<T> current_node = head;
-        while (current_node != tail) {
-            if (is_lesser(current_node))
+        Node<T> previous_node;
+        while (current_node != tail.get_next()) {
+            if (is_lesser(current_node, head)) {
+                previous_node = current_node.get_previous();
+                if (current_node == tail)
+                    this.tail = previous_node;
                 list.insert(current_node, head);
+                this.head = current_node;
+                current_node = previous_node;
+            }
             current_node = list.iterate(current_node);
         }
     }
@@ -28,7 +51,7 @@ public class Lynn_sort<T extends Comparable<T>> {
         this.tail = list.get_tail();
 
         while (sudden_drop) {
-            sort_sections();
+            sort_sections ();
         }
     }
 }
