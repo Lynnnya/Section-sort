@@ -1,4 +1,4 @@
-package io.github.lynnnya.linked.list;
+package io.github.lynnnya.linkedlist;
 
 public class Node<T> implements Comparable<Node<T>> {
     private final T payload;

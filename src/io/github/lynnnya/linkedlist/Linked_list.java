@@ -1,4 +1,4 @@
-package io.github.lynnnya.linked.list;
+package io.github.lynnnya.linkedlist;
 
 import io.github.lynnnya.lynnsort.Lynn_sort;
 public class Linked_list<T extends Comparable<T>> {
@@ -45,8 +45,30 @@ public class Linked_list<T extends Comparable<T>> {
     public int length () {
         return length;
     }
-    public Node<T> iterate (Node<T> current_node) {
-        return current_node.get_next();
+    public void remove (Node<T> tb_removed) {
+        if (tb_removed == null)
+            return;
+        this.length--;
+        Node<T> next = tb_removed.get_next();
+        Node<T> previous = tb_removed.get_previous();
+        if (next == null && previous == null) {
+            this.head = null;
+            this.tail = null;
+            return;
+        }
+        if (next == null) {
+            tb_removed.get_previous().set_next(null);
+            this.tail = tb_removed.get_previous();
+        }
+        else
+            tb_removed.get_next().set_previous(previous);
+
+        if (previous == null) {
+            tb_removed.get_next().set_previous(null);
+            this.head = tb_removed.get_next();
+        }
+        else
+            tb_removed.get_previous().set_next(next);
     }
     public void insert (Node<T> first, Node<T> last, Node<T> position) {
         Node<T> end_next = last.get_next();
@@ -88,20 +110,20 @@ public class Linked_list<T extends Comparable<T>> {
             this.head = tb_insert.get_next();
         else
             tb_insert.get_previous().set_next(ins_next);
-        tb_insert.get_next().set_previous(ins_previous);
-        if (position == null) {
-            tb_insert.set_next(null);
-            add_node(tb_insert);
-            return;
-        }
 
-        Node<T> pos_previous = position.get_previous();
         if (ins_next == null)
             this.tail = tb_insert.get_previous();
         else
             tb_insert.get_next().set_previous(ins_previous);
-        tb_insert.get_previous().set_next(ins_next);
 
+        if (position == null) {
+            tb_insert.set_next(null);
+            add_node(tb_insert);
+            length--;
+            return;
+        }
+
+        Node<T> pos_previous = position.get_previous();
         if (pos_previous == null)
             this.head = tb_insert;
         else
