@@ -15,6 +15,8 @@ public class Linked_list<T extends Comparable<T>> {
         this.length = 1;
     }
     public void add_node (Node<T> node) {
+        if (node == null)
+            return;
         if (head == null) {
             this.head = node;
             this.tail = node;
