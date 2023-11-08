@@ -82,7 +82,10 @@ public class Linked_list<T extends Comparable<T>> {
             this.head = last.get_next();
         else
             first.get_previous().set_next(end_next);
-        last.get_next().set_previous(begin_previous);
+        if (end_next == null)
+            this.tail = first.get_previous();
+        else
+            last.get_next().set_previous(begin_previous);
 
         if (position == null) {
             first.set_previous(this.tail);
