@@ -30,7 +30,7 @@ public class Lynn_sort<T extends Comparable<T>> {
         current = next;
         return current;
     }
-    private void head_merge (Node<T> current) {
+    private void merge (Node<T> current) {
         Node<T> next;
         while (this.head != this.tail.get_next()) {
 
@@ -60,9 +60,17 @@ public class Lynn_sort<T extends Comparable<T>> {
             this.head = this.head.get_next();
         }
     }
-    private void head_merge () {
-        Node<T> current = head_list.get_tail().get_payload();
+    private void head_merge (Node<Node<T>> segment) {
+        Node<T> current = segment.get_next().get_payload();
         Node<T> next;
+        if (segment.get_next().get_next() != null)
+            this.end = segment.get_next().get_next().get_payload().get_previous();
+        else {
+            if (tail_list.length() == 1)
+                this.end = tail_list.get_tail().get_payload().get_next();
+            else
+                this.end = list.get_tail();
+        }
         while (this.head != this.tail.get_next()) {
             if (!is_lesser(current, this.head) && is_lesser(current, this.head.get_next())) {
                 if (is_greater(current.get_next(), this.head.get_next())) {
@@ -246,15 +254,32 @@ public class Lynn_sort<T extends Comparable<T>> {
             list.to_string();
         }
 
-        if (tail_list.length() == 1)
-            this.end = tail_list.get_tail().get_payload().get_next();
-        else
-            this.end = list.get_tail();
+        Node<Node<T>> current = head_list.get_head();
+        int l = head_list.length();
+        l++;
+
         while (head_list.length() > 0) {
-            this.head = head_list.get_tail().get_previous().get_payload();
-            this.tail = head_list.get_tail().get_payload().get_previous();
-            head_merge ();
-            head_list.remove(head_list.get_tail());
+            System.out.println("\n" + "-----------------------------------------------");
+            Node<Node<T>> x = head_list.get_head();
+            while (x != head_list.get_tail().get_next()) {
+                System.out.print(x.get_payload().get_payload() + ", ");
+                x = x.get_next();
+            }
+            while (current != null) {
+                if (current.get_next() != null) {
+                    this.head = current.get_payload();
+                    this.tail = current.get_next().get_payload().get_previous();
+                    head_merge(current);
+                    head_list.remove(current.get_next());
+                    current = current.get_next();
+                    continue;
+                }
+                this.head = list.get_head();
+                this.tail = current.get_payload().get_previous();
+                head_merge(current.get_previous());
+                head_list.remove(current);
+                break;
+            }
         }
 
         if (debug) {
@@ -267,7 +292,7 @@ public class Lynn_sort<T extends Comparable<T>> {
             return;
         this.head = list.get_head();
         this.tail = this.end.get_previous();
-        head_merge(this.end);
+        merge(this.end);
     }
 }
 
