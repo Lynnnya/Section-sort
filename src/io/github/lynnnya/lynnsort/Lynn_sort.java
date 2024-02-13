@@ -9,7 +9,6 @@ public class Lynn_sort<T extends Comparable<T>> {
     Linked_list<Node<T>> tail_list = new Linked_list<>();
     private Node<T> start;
     private Node<T> head;
-    private Node<T> tail;
 
     public Lynn_sort(Linked_list<T> list) {
         this.list = list;
@@ -38,15 +37,62 @@ public class Lynn_sort<T extends Comparable<T>> {
         }
     }
 
+    private Node<T> lf_section(Node<T> beginning) {
+        Node<T> current = list.get_head();
+        while (current.get_next() != null) {
+            if (is_greater(current, current.get_next())) {
+                return current;
+            }
+            current = current.get_next();
+        }
+        return null;
+    }
+
     private void merge() {
         Node<T> current = list.get_head();
         Node<T> tail = null;
+        Node<T> tail_next = null;
+        tail = lf_section(current);
+        if (debug) {
+            System.out.println("\n" + "-----------------------------------------------");
+            System.out.println("Tail = " + tail.get_payload());
+            System.out.println("\n" + "-----------------------------------------------");
+        }
         while (current.get_next() != null) {
-            if (is_lesser(current, current.get_next())) {
-                tail = current;
+            if (current == tail) {
                 current = list.get_head();
+                tail = lf_section(tail);
+                if (debug) {
+                    System.out.println("\n" + "-----------------------------------------------");
+                    System.out.println("Tail = " + tail.get_payload());
+                    System.out.println("\n" + "-----------------------------------------------");
+                }
             }
-
+            if (tail == null || tail.get_next() == null) {
+                break;
+            }
+            if (is_greater(current.get_next(), tail.get_next())) {
+                tail_next = tail.get_next();
+                if (debug) {
+                    System.out.println("\n" + "-----------------------------------------------");
+                    System.out.println("To be swapped = " + tail.get_next().get_payload());
+                    System.out.println("Current = " + current.get_payload());
+                    System.out.println("\n" + "-----------------------------------------------");
+                }
+                list.insert(tail.get_next(), current.get_next());
+                if (debug) {
+                    list.to_string();
+                    System.out.println("\n" + "-----------------------------------------------");
+                }
+                if (tail == null || tail.get_next() == null) {
+                    break;
+                }
+                if (is_greater(tail_next, tail.get_next())) {
+                    current = list.get_head();
+                }
+            } else {
+                current = current.get_next();
+            }
         }
     }
 
@@ -56,7 +102,12 @@ public class Lynn_sort<T extends Comparable<T>> {
             s_section();
             head = head.get_next();
         }
-
+        if (debug) {
+            System.out.println("\n" + "-----------------------------------------------");
+            this.list.to_string();
+            System.out.println("\n" + "-----------------------------------------------");
+        }
+        merge();
     }
 }
 /*
