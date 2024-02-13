@@ -1,3 +1,6 @@
+import java.util. *;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import io.github.lynnnya.linkedlist.*;
@@ -64,19 +67,29 @@ public class Sort_list {
         // list.sort();
         // list.to_string();
 
-        for (int i = 0; i < 50000; i++) {
-            list.add_node(rand.nextInt(50000));
-        }
-        // list.to_string();
-        long pre = System.nanoTime();
-        long after;
-        list.sort();
-        after = System.nanoTime();
-        long time = after - pre;
-        System.out.println(time);
+//        for (int i = 0; i < 50000; i++) {
+//            list.add_node(rand.nextInt(50000));
+//        }
+//        // list.to_string();
+//        long pre = System.nanoTime();
+//        long after;
+//        list.sort();
+//        after = System.nanoTime();
+//        long time = after - pre;
+//        System.out.println(time);
 
         if (debug) {
             do_debug();
         }
+        List<Integer> test = new LinkedList<>();
+        for (int i = 0; i < 100000; i++) {
+            test.add(rand.nextInt(50000));
+        }
+        long pre = System.nanoTime();
+        long after;
+        Collections.sort(test);
+        after = System.nanoTime();
+        long time = after - pre;
+        System.out.println(time);
     }
 }
